@@ -3,12 +3,13 @@ require "spec_helper"
 RSpec.describe BBBEvents::Recording do
   context "#metadata" do
     it "should properly parse metadata." do
+      # Attribute names are kept as they are in events.xml
       expect(@sample.metadata).to eql({
-        "gl_listed": "false",
-        isBreakout: "false",
-        meetingName: "Home Room",
-        meetingId: "ae5e285551844c61c757f4c8f233850a2e0b16bf",
-      }.with_indifferent_access)
+        "gl-listed" => "false",
+        "isBreakout" => "false",
+        "meetingName" => "Home Room",
+        "meetingId" => "ae5e285551844c61c757f4c8f233850a2e0b16bf",
+      })
     end
   end
 
