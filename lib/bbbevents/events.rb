@@ -186,13 +186,20 @@ module BBBEvents
       end
     end
 
+    # Track the periods in which the meeting was being recorded. A start while
+    # already recording and a stop while not recording are ignored.
     def record_status_event(e)
+      timestamp = Time.at(timestamp_conversion(e.dig("attributes", "timestamp")))
+      recording = @recorded_segments.any? && @recorded_segments.last.stop.nil?
+
       if e["status"] == "true"
-        r = RecordedSegment.new
-        r.start = Time.at(timestamp_conversion(e.dig("attributes", "timestamp")))
-        @recorded_segments << r
-      else
-        @recorded_segments.last.stop = Time.at(timestamp_conversion(e.dig("attributes", "timestamp")))
+        unless recording
+          segment = RecordedSegment.new
+          segment.start = timestamp
+          @recorded_segments << segment
+        end
+      elsif recording
+        @recorded_segments.last.stop = timestamp
       end
     end
 

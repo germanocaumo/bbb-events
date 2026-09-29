@@ -1,4 +1,5 @@
 require "bundler/setup"
+require "tempfile"
 require "time"
 require "bbbevents"
 
